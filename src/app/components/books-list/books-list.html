@@ -7,10 +7,11 @@
   <input
     class="search"
     type="search"
-    placeholder="Buscar por título, ISBN o descripción"
+    placeholder="Buscar por título, ISBN, descripción o editorial"
     aria-label="Buscar libros"
     [(ngModel)]="search"
     (ngModelChange)="page.set(1)"
+    style="min-width:370px"
   />
   <app-view-toggle [(mode)]="viewMode" />
 </div>
@@ -29,6 +30,7 @@
           <th></th>
           <th>Título</th>
           <th>Descripción</th>
+          <th>Editorial</th>
           <th>Autores</th>
           <th>Idioma</th>
           <th>Año</th>
@@ -53,6 +55,14 @@
             <td [title]="book.description || ''">
               @if (book.description) {
                 {{ book.description | truncate:70 }}
+              } @else {
+                <span class="muted">—</span>
+              }
+            </td>
+
+            <td>
+              @if (book.publisher){
+                {{ book.publisher }}
               } @else {
                 <span class="muted">—</span>
               }
@@ -84,7 +94,7 @@
           </tr>
         } @empty {
           <tr>
-            <td class="empty" colspan="9">
+            <td class="empty" colspan="10">
               @if (search()) {
                 No hay resultados para "{{ search() }}"
               } @else {
@@ -118,6 +128,13 @@
             @if (book.description) {
               <p class="card-text" [title]="book.description">{{ book.description | truncate: 90 }}</p>
             }
+            <span>
+              @if (book.publisher) {
+                {{ book.publisher }}
+              } @else {
+                <span class="muted">Sin editorial</span>
+              }
+            </span>
             <span>
               {{ book.language | languageName }}
               @if (book.publishedYear) {
